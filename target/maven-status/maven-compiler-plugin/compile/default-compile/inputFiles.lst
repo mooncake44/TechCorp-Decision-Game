@@ -1,0 +1,11 @@
+/workspaces/TechCorp-Decision-Game/src/main/java/com/university/techcorp/Main.java
+/workspaces/TechCorp-Decision-Game/src/main/java/com/university/techcorp/domain/Company.java
+/workspaces/TechCorp-Decision-Game/src/main/java/com/university/techcorp/domain/Developer.java
+/workspaces/TechCorp-Decision-Game/src/main/java/com/university/techcorp/domain/Employee.java
+/workspaces/TechCorp-Decision-Game/src/main/java/com/university/techcorp/domain/Manager.java
+/workspaces/TechCorp-Decision-Game/src/main/java/com/university/techcorp/domain/Project.java
+/workspaces/TechCorp-Decision-Game/src/main/java/com/university/techcorp/domain/ProjectStatus.java
+/workspaces/TechCorp-Decision-Game/src/main/java/com/university/techcorp/engine/GameEngine.java
+/workspaces/TechCorp-Decision-Game/src/main/java/com/university/techcorp/events/GameEvent.java
+/workspaces/TechCorp-Decision-Game/src/main/java/com/university/techcorp/events/MarketSlowdownEvent.java
+/workspaces/TechCorp-Decision-Game/src/main/java/com/university/techcorp/ui/ConsoleUI.java
