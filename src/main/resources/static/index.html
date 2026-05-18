@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TechCorp Simulator</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #eef2f7;
+            color: #1f2937;
+        }
+
+        header {
+            background: #111827;
+            color: white;
+            padding: 24px 40px;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 32px;
+        }
+
+        header p {
+            margin: 8px 0 0;
+            color: #d1d5db;
+        }
+
+        .container {
+            padding: 30px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 14px;
+            padding: 18px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+        }
+
+        .card h3 {
+            margin: 0 0 8px;
+            color: #6b7280;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .card .value {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            margin-top: 0;
+            font-size: 22px;
+        }
+
+        .employee,
+        .project {
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 12px;
+            background: #f9fafb;
+        }
+
+        .employee strong,
+        .project strong {
+            font-size: 18px;
+        }
+
+        .muted {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .progress-bar {
+            height: 14px;
+            background: #e5e7eb;
+            border-radius: 999px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #2563eb;
+            width: 0%;
+        }
+
+        .actions {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        button {
+            border: none;
+            border-radius: 12px;
+            padding: 14px 16px;
+            background: #2563eb;
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        button.secondary {
+            background: #4b5563;
+        }
+
+        button.secondary:hover {
+            background: #374151;
+        }
+
+        button.danger {
+            background: #dc2626;
+        }
+
+        button.danger:hover {
+            background: #b91c1c;
+        }
+
+        .message {
+            background: #ecfdf5;
+            border: 1px solid #10b981;
+            color: #065f46;
+            border-radius: 12px;
+            padding: 16px;
+            font-weight: bold;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: bold;
+            background: #e0e7ff;
+            color: #3730a3;
+            margin-left: 6px;
+        }
+
+        .finished {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .planned {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .hold {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        @media (max-width: 900px) {
+            .status-grid,
+            .main-grid,
+            .actions {
+                grid-template-columns: 1fr;
+            }
+
+            header {
+                padding: 20px;
+            }
+
+            .container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<header>
+    <h1>TechCorp Simulator</h1>
+    <p>Turn-based business decision game</p>
+</header>
+
+<div class="container">
+
+    <div class="status-grid">
+        <div class="card">
+            <h3>Turn</h3>
+            <div class="value" id="turn">-</div>
+        </div>
+
+        <div class="card">
+            <h3>Cash</h3>
+            <div class="value" id="cash">-</div>
+        </div>
+
+        <div class="card">
+            <h3>Reputation</h3>
+            <div class="value" id="reputation">-</div>
+        </div>
+
+        <div class="card">
+            <h3>Company Value</h3>
+            <div class="value" id="companyValue">-</div>
+        </div>
+
+        <div class="card">
+            <h3>Result</h3>
+            <div class="value" id="result">-</div>
+        </div>
+    </div>
+
+    <div class="actions">
+        <button onclick="performAction('/game/start-projects')">Start Projects</button>
+        <button onclick="performAction('/game/assign-employees')">Assign Employees</button>
+        <button onclick="performAction('/game/work')">Work One Turn</button>
+        <button onclick="performAction('/game/pay-salaries')">Pay Salaries</button>
+        <button onclick="performAction('/game/collect-revenue')">Collect Revenue</button>
+        <button onclick="performAction('/game/next-turn')">Next Full Turn</button>
+        <button class="secondary" onclick="loadState()">Refresh</button>
+        <button class="danger" onclick="performAction('/game/reset')">Reset Game</button>
+    </div>
+
+    <div class="main-grid">
+        <div class="card">
+            <h2 class="section-title">Employees</h2>
+            <div id="employees"></div>
+        </div>
+
+        <div class="card">
+            <h2 class="section-title">Projects</h2>
+            <div id="projects"></div>
+        </div>
+    </div>
+
+    <div class="message" id="message">
+        Loading game...
+    </div>
+
+</div>
+
+<script>
+    async function loadState() {
+        const response = await fetch('/game/state');
+        const data = await response.json();
+        renderGame(data);
+    }
+
+    async function performAction(endpoint) {
+        const response = await fetch(endpoint);
+        const data = await response.json();
+        renderGame(data);
+    }
+
+    function renderGame(data) {
+        document.getElementById('turn').textContent = data.turn + ' / ' + data.maxTurns;
+        document.getElementById('cash').textContent = formatMoney(data.company.cash);
+        document.getElementById('reputation').textContent = data.company.reputation;
+        document.getElementById('companyValue').textContent = formatMoney(data.company.value);
+        document.getElementById('result').textContent = data.result;
+        document.getElementById('message').textContent = data.message;
+
+        renderEmployees(data.employees);
+        renderProjects(data.projects);
+    }
+
+    function renderEmployees(employees) {
+        const container = document.getElementById('employees');
+        container.innerHTML = '';
+
+        employees.forEach(employee => {
+            const div = document.createElement('div');
+            div.className = 'employee';
+
+            div.innerHTML = `
+                <strong>${employee.name}</strong>
+                <span class="badge">${employee.role}</span>
+                <div class="muted">Skill: ${employee.skill}</div>
+                <div class="muted">Salary: ${formatMoney(employee.salary)}</div>
+            `;
+
+            container.appendChild(div);
+        });
+    }
+
+    function renderProjects(projects) {
+        const container = document.getElementById('projects');
+        container.innerHTML = '';
+
+        projects.forEach(project => {
+            const div = document.createElement('div');
+            div.className = 'project';
+
+            div.innerHTML = `
+                <strong>${project.name}</strong>
+                ${statusBadge(project.status)}
+                ${project.strategic ? '<span class="badge">Strategic</span>' : ''}
+                <div class="muted">Progress: ${project.progress} / ${project.requiredWork} (${project.progressPercentage}%)</div>
+                <div class="muted">Reward: ${formatMoney(project.reward)}</div>
+                <div class="muted">Team size: ${project.teamSize}</div>
+                <div class="muted">Paid: ${project.paid}</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: ${project.progressPercentage}%"></div>
+                </div>
+            `;
+
+            container.appendChild(div);
+        });
+    }
+
+    function statusBadge(status) {
+        let className = 'badge';
+
+        if (status === 'FINISHED') {
+            className += ' finished';
+        } else if (status === 'PLANNED') {
+            className += ' planned';
+        } else if (status === 'ON_HOLD') {
+            className += ' hold';
+        }
+
+        return `<span class="${className}">${status}</span>`;
+    }
+
+    function formatMoney(value) {
+        return Number(value).toLocaleString('en-US', {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0
+        });
+    }
+
+    loadState();
+</script>
+
+</body>
+</html>
