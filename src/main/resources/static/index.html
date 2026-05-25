@@ -5,193 +5,471 @@
     <title>TechCorp Simulator</title>
 
     <style>
+        :root {
+            --bg-main: #070b14;
+            --bg-panel: #0f172a;
+            --bg-panel-light: #111c33;
+            --bg-card: rgba(15, 23, 42, 0.88);
+            --border-soft: rgba(148, 163, 184, 0.18);
+            --border-glow: rgba(56, 189, 248, 0.35);
+            --text-main: #e5e7eb;
+            --text-muted: #94a3b8;
+            --accent-blue: #38bdf8;
+            --accent-purple: #a855f7;
+            --accent-green: #22c55e;
+            --accent-yellow: #facc15;
+            --accent-red: #ef4444;
+            --accent-orange: #f97316;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             margin: 0;
+            min-height: 100vh;
             font-family: Arial, sans-serif;
-            background: #eef2f7;
-            color: #1f2937;
+            background:
+                radial-gradient(circle at top left, rgba(56, 189, 248, 0.14), transparent 32%),
+                radial-gradient(circle at top right, rgba(168, 85, 247, 0.16), transparent 30%),
+                linear-gradient(135deg, #020617 0%, #08111f 50%, #0f172a 100%);
+            color: var(--text-main);
         }
 
         header {
-            background: #111827;
-            color: white;
-            padding: 24px 40px;
+            padding: 34px 44px 28px;
+            border-bottom: 1px solid var(--border-soft);
+            background: rgba(2, 6, 23, 0.72);
+            backdrop-filter: blur(18px);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .hero {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .hero-title {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .eyebrow {
+            color: var(--accent-blue);
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            font-weight: bold;
         }
 
         header h1 {
             margin: 0;
-            font-size: 32px;
+            font-size: 38px;
+            letter-spacing: -0.04em;
         }
 
         header p {
-            margin: 8px 0 0;
-            color: #d1d5db;
+            margin: 0;
+            color: var(--text-muted);
+            max-width: 680px;
+            line-height: 1.5;
+        }
+
+        .hero-pill {
+            padding: 12px 16px;
+            border-radius: 999px;
+            border: 1px solid var(--border-glow);
+            color: #bae6fd;
+            background: rgba(14, 165, 233, 0.08);
+            font-weight: bold;
+            white-space: nowrap;
+            box-shadow: 0 0 24px rgba(56, 189, 248, 0.12);
         }
 
         .container {
-            padding: 30px 40px;
-            max-width: 1200px;
+            padding: 32px 40px 46px;
+            max-width: 1280px;
             margin: 0 auto;
+        }
+
+        .dashboard-shell {
+            border: 1px solid var(--border-soft);
+            background: rgba(2, 6, 23, 0.38);
+            border-radius: 28px;
+            padding: 22px;
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
         }
 
         .status-grid {
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 16px;
-            margin-bottom: 24px;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 14px;
+            margin-bottom: 22px;
         }
 
         .card {
-            background: white;
-            border-radius: 14px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-soft);
+            border-radius: 20px;
             padding: 18px;
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.22);
+        }
+
+        .metric-card {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.08), transparent 55%);
+            pointer-events: none;
         }
 
         .card h3 {
-            margin: 0 0 8px;
-            color: #6b7280;
-            font-size: 14px;
+            margin: 0 0 10px;
+            color: var(--text-muted);
+            font-size: 12px;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.12em;
         }
 
         .card .value {
-            font-size: 24px;
-            font-weight: bold;
+            font-size: 23px;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            position: relative;
         }
 
         .main-grid {
             display: grid;
-            grid-template-columns: 1fr 1.5fr;
-            gap: 24px;
-            margin-bottom: 24px;
+            grid-template-columns: 0.9fr 1.7fr;
+            gap: 22px;
+            margin-top: 22px;
+        }
+
+        .section-title-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 14px;
         }
 
         .section-title {
-            margin-top: 0;
+            margin: 0;
             font-size: 22px;
+            letter-spacing: -0.03em;
+        }
+
+        .section-subtitle {
+            color: var(--text-muted);
+            font-size: 13px;
+            margin-top: 5px;
         }
 
         .employee,
         .project {
-            border: 1px solid #e5e7eb;
-            border-radius: 12px;
-            padding: 14px;
-            margin-bottom: 12px;
-            background: #f9fafb;
+            border: 1px solid var(--border-soft);
+            border-radius: 18px;
+            padding: 16px;
+            margin-bottom: 13px;
+            background:
+                linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(17, 24, 39, 0.82));
+        }
+
+        .employee {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 8px;
         }
 
         .employee strong,
         .project strong {
             font-size: 18px;
+            letter-spacing: -0.02em;
         }
 
         .muted {
-            color: #6b7280;
+            color: var(--text-muted);
             font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .project-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .project-name-block {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .project-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .mini-stat {
+            background: rgba(2, 6, 23, 0.35);
+            border: 1px solid var(--border-soft);
+            border-radius: 14px;
+            padding: 10px;
+        }
+
+        .mini-stat span {
+            display: block;
+            color: var(--text-muted);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 5px;
+        }
+
+        .mini-stat strong {
+            font-size: 15px;
         }
 
         .progress-bar {
-            height: 14px;
-            background: #e5e7eb;
+            height: 12px;
+            background: rgba(148, 163, 184, 0.18);
             border-radius: 999px;
             overflow: hidden;
-            margin-top: 10px;
+            margin-top: 14px;
+            border: 1px solid rgba(148, 163, 184, 0.12);
         }
 
         .progress-fill {
             height: 100%;
-            background: #2563eb;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
             width: 0%;
+            transition: width 0.35s ease;
+            box-shadow: 0 0 18px rgba(56, 189, 248, 0.45);
         }
 
-        .actions {
+        .top-actions {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: 1.4fr 1fr 1fr;
             gap: 12px;
-            margin-bottom: 24px;
+            margin-bottom: 18px;
+        }
+
+        .project-actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 14px;
         }
 
         button {
             border: none;
-            border-radius: 12px;
-            padding: 14px 16px;
-            background: #2563eb;
+            border-radius: 14px;
+            padding: 14px 15px;
             color: white;
-            font-size: 15px;
-            font-weight: bold;
+            font-size: 14px;
+            font-weight: 800;
             cursor: pointer;
+            transition: transform 0.12s ease, filter 0.12s ease, box-shadow 0.12s ease;
         }
 
         button:hover {
-            background: #1d4ed8;
+            transform: translateY(-1px);
+            filter: brightness(1.08);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button.primary {
+            background: linear-gradient(135deg, #0284c7, #7c3aed);
+            box-shadow: 0 14px 28px rgba(56, 189, 248, 0.16);
         }
 
         button.secondary {
-            background: #4b5563;
-        }
-
-        button.secondary:hover {
-            background: #374151;
+            background: rgba(71, 85, 105, 0.92);
+            border: 1px solid rgba(148, 163, 184, 0.22);
         }
 
         button.danger {
-            background: #dc2626;
+            background: linear-gradient(135deg, #b91c1c, #f97316);
+            box-shadow: 0 14px 28px rgba(239, 68, 68, 0.15);
         }
 
-        button.danger:hover {
-            background: #b91c1c;
+        button.project-button {
+            background: linear-gradient(135deg, #047857, #0f766e);
+        }
+
+        button.assign-button {
+            background: linear-gradient(135deg, #6d28d9, #9333ea);
+        }
+
+        button:disabled {
+            background: #334155;
+            color: #94a3b8;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+            filter: none;
         }
 
         .message {
-            background: #ecfdf5;
-            border: 1px solid #10b981;
-            color: #065f46;
-            border-radius: 12px;
-            padding: 16px;
+            background: rgba(6, 78, 59, 0.3);
+            border: 1px solid rgba(34, 197, 94, 0.38);
+            color: #bbf7d0;
+            border-radius: 18px;
+            padding: 16px 18px;
             font-weight: bold;
+            margin-bottom: 22px;
+            box-shadow: 0 0 32px rgba(34, 197, 94, 0.08);
+            line-height: 1.45;
+        }
+
+        .game-over {
+            background: rgba(124, 45, 18, 0.38);
+            border: 1px solid rgba(249, 115, 22, 0.55);
+            color: #fed7aa;
+            box-shadow: 0 0 32px rgba(249, 115, 22, 0.1);
         }
 
         .badge {
             display: inline-block;
-            padding: 4px 8px;
+            padding: 5px 9px;
             border-radius: 999px;
-            font-size: 12px;
-            font-weight: bold;
-            background: #e0e7ff;
-            color: #3730a3;
+            font-size: 11px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            background: rgba(99, 102, 241, 0.16);
+            color: #c4b5fd;
+            border: 1px solid rgba(167, 139, 250, 0.22);
             margin-left: 6px;
         }
 
         .finished {
-            background: #dcfce7;
-            color: #166534;
+            background: rgba(34, 197, 94, 0.16);
+            color: #86efac;
+            border-color: rgba(34, 197, 94, 0.34);
         }
 
         .planned {
-            background: #fef3c7;
-            color: #92400e;
+            background: rgba(250, 204, 21, 0.13);
+            color: #fde68a;
+            border-color: rgba(250, 204, 21, 0.34);
+        }
+
+        .in-progress {
+            background: rgba(56, 189, 248, 0.15);
+            color: #7dd3fc;
+            border-color: rgba(56, 189, 248, 0.32);
         }
 
         .hold {
-            background: #fee2e2;
-            color: #991b1b;
+            background: rgba(248, 113, 113, 0.14);
+            color: #fca5a5;
+            border-color: rgba(248, 113, 113, 0.32);
         }
 
-        @media (max-width: 900px) {
-            .status-grid,
-            .main-grid,
-            .actions {
-                grid-template-columns: 1fr;
+        .cancelled {
+            background: rgba(148, 163, 184, 0.14);
+            color: #cbd5e1;
+            border-color: rgba(148, 163, 184, 0.25);
+        }
+
+        .hint {
+            background: rgba(14, 165, 233, 0.08);
+            border: 1px solid rgba(56, 189, 248, 0.28);
+            color: #bae6fd;
+            border-radius: 18px;
+            padding: 15px 18px;
+            margin-bottom: 18px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .role-tag {
+            color: var(--accent-blue);
+            font-weight: bold;
+        }
+
+        .employee-meta {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-top: 4px;
+        }
+
+        .employee-meta div {
+            background: rgba(2, 6, 23, 0.28);
+            border: 1px solid var(--border-soft);
+            border-radius: 12px;
+            padding: 9px;
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        .employee-meta strong {
+            color: var(--text-main);
+            font-size: 13px;
+        }
+
+        @media (max-width: 1050px) {
+            .status-grid {
+                grid-template-columns: repeat(3, 1fr);
             }
 
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 700px) {
             header {
-                padding: 20px;
+                padding: 22px;
+                position: static;
+            }
+
+            .hero {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            header h1 {
+                font-size: 30px;
             }
 
             .container {
                 padding: 20px;
+            }
+
+            .dashboard-shell {
+                padding: 14px;
+                border-radius: 22px;
+            }
+
+            .status-grid,
+            .top-actions,
+            .project-actions,
+            .project-stats,
+            .employee-meta {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -199,66 +477,97 @@
 
 <body>
 <header>
-    <h1>TechCorp Simulator</h1>
-    <p>Turn-based business decision game</p>
+    <div class="hero">
+        <div class="hero-title">
+            <div class="eyebrow">Executive Simulation Console</div>
+            <h1>TechCorp Simulator</h1>
+            <p>
+                Manage projects, budget and employees in a turn-based business strategy game.
+                Reach the target company value before time runs out.
+            </p>
+        </div>
+
+        <div class="hero-pill">
+            Strategic Mode Active
+        </div>
+    </div>
 </header>
 
 <div class="container">
+    <div class="dashboard-shell">
 
-    <div class="status-grid">
-        <div class="card">
-            <h3>Turn</h3>
-            <div class="value" id="turn">-</div>
+        <div class="status-grid">
+            <div class="card metric-card">
+                <h3>Turn</h3>
+                <div class="value" id="turn">-</div>
+            </div>
+
+            <div class="card metric-card">
+                <h3>Cash</h3>
+                <div class="value" id="cash">-</div>
+            </div>
+
+            <div class="card metric-card">
+                <h3>Reputation</h3>
+                <div class="value" id="reputation">-</div>
+            </div>
+
+            <div class="card metric-card">
+                <h3>Company Value</h3>
+                <div class="value" id="companyValue">-</div>
+            </div>
+
+            <div class="card metric-card">
+                <h3>Target Value</h3>
+                <div class="value" id="targetValue">-</div>
+            </div>
+
+            <div class="card metric-card">
+                <h3>Result</h3>
+                <div class="value" id="result">-</div>
+            </div>
         </div>
 
-        <div class="card">
-            <h3>Cash</h3>
-            <div class="value" id="cash">-</div>
+        <div class="hint">
+            <strong>Mission:</strong> Start projects carefully, assign your team and process full turns.
+            Completing all projects ends the game early. Victory requires reaching the target company value.
         </div>
 
-        <div class="card">
-            <h3>Reputation</h3>
-            <div class="value" id="reputation">-</div>
+        <div class="top-actions">
+            <button class="primary" id="nextTurnButton" onclick="performAction('/game/next-turn')">
+                Process Next Turn
+            </button>
+            <button class="secondary" onclick="loadState()">Refresh Dashboard</button>
+            <button class="danger" onclick="performAction('/game/reset')">Restart Simulation</button>
         </div>
 
-        <div class="card">
-            <h3>Company Value</h3>
-            <div class="value" id="companyValue">-</div>
+        <div class="message" id="message">
+            Loading game...
         </div>
 
-        <div class="card">
-            <h3>Result</h3>
-            <div class="value" id="result">-</div>
+        <div class="main-grid">
+            <div class="card">
+                <div class="section-title-row">
+                    <div>
+                        <h2 class="section-title">Team</h2>
+                        <div class="section-subtitle">Available employees and monthly cost</div>
+                    </div>
+                </div>
+                <div id="employees"></div>
+            </div>
+
+            <div class="card">
+                <div class="section-title-row">
+                    <div>
+                        <h2 class="section-title">Project Portfolio</h2>
+                        <div class="section-subtitle">Choose what to start and where to assign the team</div>
+                    </div>
+                </div>
+                <div id="projects"></div>
+            </div>
         </div>
+
     </div>
-
-    <div class="actions">
-        <button onclick="performAction('/game/start-projects')">Start Projects</button>
-        <button onclick="performAction('/game/assign-employees')">Assign Employees</button>
-        <button onclick="performAction('/game/work')">Work One Turn</button>
-        <button onclick="performAction('/game/pay-salaries')">Pay Salaries</button>
-        <button onclick="performAction('/game/collect-revenue')">Collect Revenue</button>
-        <button onclick="performAction('/game/next-turn')">Next Full Turn</button>
-        <button class="secondary" onclick="loadState()">Refresh</button>
-        <button class="danger" onclick="performAction('/game/reset')">Reset Game</button>
-    </div>
-
-    <div class="main-grid">
-        <div class="card">
-            <h2 class="section-title">Employees</h2>
-            <div id="employees"></div>
-        </div>
-
-        <div class="card">
-            <h2 class="section-title">Projects</h2>
-            <div id="projects"></div>
-        </div>
-    </div>
-
-    <div class="message" id="message">
-        Loading game...
-    </div>
-
 </div>
 
 <script>
@@ -274,16 +583,41 @@
         renderGame(data);
     }
 
+    async function startProject(projectIndex) {
+        const response = await fetch('/game/start-project/' + projectIndex);
+        const data = await response.json();
+        renderGame(data);
+    }
+
+    async function assignEmployees(projectIndex) {
+        const response = await fetch('/game/assign-employees/' + projectIndex);
+        const data = await response.json();
+        renderGame(data);
+    }
+
     function renderGame(data) {
         document.getElementById('turn').textContent = data.turn + ' / ' + data.maxTurns;
         document.getElementById('cash').textContent = formatMoney(data.company.cash);
         document.getElementById('reputation').textContent = data.company.reputation;
         document.getElementById('companyValue').textContent = formatMoney(data.company.value);
-        document.getElementById('result').textContent = data.result;
-        document.getElementById('message').textContent = data.message;
+        document.getElementById('targetValue').textContent = formatMoney(data.targetCompanyValue);
+        document.getElementById('result').textContent = formatResult(data.result);
+
+        const eventMessage = data.eventMessage ? data.eventMessage : '';
+        const finalMessage = data.result !== 'IN_PROGRESS' ? ' ' + data.finalMessage : '';
+
+        const messageBox = document.getElementById('message');
+        messageBox.textContent = data.message + ' ' + eventMessage + finalMessage;
+
+        if (data.result !== 'IN_PROGRESS') {
+            messageBox.classList.add('game-over');
+        } else {
+            messageBox.classList.remove('game-over');
+        }
 
         renderEmployees(data.employees);
-        renderProjects(data.projects);
+        renderProjects(data.projects, data.result);
+        updateButtons(data);
     }
 
     function renderEmployees(employees) {
@@ -297,15 +631,18 @@
             div.innerHTML = `
                 <strong>${employee.name}</strong>
                 <span class="badge">${employee.role}</span>
-                <div class="muted">Skill: ${employee.skill}</div>
-                <div class="muted">Salary: ${formatMoney(employee.salary)}</div>
+
+                <div class="employee-meta">
+                    <div>Skill<br><strong>${employee.skill}</strong></div>
+                    <div>Salary<br><strong>${formatMoney(employee.salary)}</strong></div>
+                </div>
             `;
 
             container.appendChild(div);
         });
     }
 
-    function renderProjects(projects) {
+    function renderProjects(projects, result) {
         const container = document.getElementById('projects');
         container.innerHTML = '';
 
@@ -313,16 +650,63 @@
             const div = document.createElement('div');
             div.className = 'project';
 
+            const gameFinished = result !== 'IN_PROGRESS';
+            const canStart = !gameFinished && (project.status === 'PLANNED' || project.status === 'ON_HOLD');
+            const canAssign = !gameFinished && project.status !== 'FINISHED' && project.status !== 'CANCELLED';
+
             div.innerHTML = `
-                <strong>${project.name}</strong>
-                ${statusBadge(project.status)}
-                ${project.strategic ? '<span class="badge">Strategic</span>' : ''}
-                <div class="muted">Progress: ${project.progress} / ${project.requiredWork} (${project.progressPercentage}%)</div>
-                <div class="muted">Reward: ${formatMoney(project.reward)}</div>
-                <div class="muted">Team size: ${project.teamSize}</div>
-                <div class="muted">Paid: ${project.paid}</div>
+                <div class="project-head">
+                    <div class="project-name-block">
+                        <div>
+                            <strong>${project.name}</strong>
+                            ${project.strategic ? '<span class="badge">Strategic</span>' : ''}
+                        </div>
+                        <div>${statusBadge(project.status)}</div>
+                    </div>
+                </div>
+
+                <div class="muted">
+                    Progress: ${project.progress} / ${project.requiredWork} (${project.progressPercentage}%)
+                </div>
+
                 <div class="progress-bar">
                     <div class="progress-fill" style="width: ${project.progressPercentage}%"></div>
+                </div>
+
+                <div class="project-stats">
+                    <div class="mini-stat">
+                        <span>Reward</span>
+                        <strong>${formatMoney(project.reward)}</strong>
+                    </div>
+
+                    <div class="mini-stat">
+                        <span>Start Cost</span>
+                        <strong>${formatMoney(project.startCost)}</strong>
+                    </div>
+
+                    <div class="mini-stat">
+                        <span>Team</span>
+                        <strong>${project.teamSize}</strong>
+                    </div>
+
+                    <div class="mini-stat">
+                        <span>Paid</span>
+                        <strong>${project.paid ? 'Yes' : 'No'}</strong>
+                    </div>
+                </div>
+
+                <div class="project-actions">
+                    <button class="project-button"
+                            onclick="startProject(${project.index})"
+                            ${canStart ? '' : 'disabled'}>
+                        Start Project
+                    </button>
+
+                    <button class="assign-button"
+                            onclick="assignEmployees(${project.index})"
+                            ${canAssign ? '' : 'disabled'}>
+                        Assign Team
+                    </button>
                 </div>
             `;
 
@@ -337,11 +721,20 @@
             className += ' finished';
         } else if (status === 'PLANNED') {
             className += ' planned';
+        } else if (status === 'IN_PROGRESS') {
+            className += ' in-progress';
         } else if (status === 'ON_HOLD') {
             className += ' hold';
+        } else if (status === 'CANCELLED') {
+            className += ' cancelled';
         }
 
-        return `<span class="${className}">${status}</span>`;
+        return `<span class="${className}">${formatStatus(status)}</span>`;
+    }
+
+    function updateButtons(data) {
+        const gameFinished = data.result !== 'IN_PROGRESS';
+        document.getElementById('nextTurnButton').disabled = gameFinished;
     }
 
     function formatMoney(value) {
@@ -349,6 +742,14 @@
             minimumFractionDigits: 0,
             maximumFractionDigits: 0
         });
+    }
+
+    function formatStatus(status) {
+        return String(status).replace('_', ' ');
+    }
+
+    function formatResult(result) {
+        return String(result).replace('_', ' ');
     }
 
     loadState();

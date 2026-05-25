@@ -11,6 +11,7 @@ import com.university.techcorp.events.ClientBonusEvent;
 import com.university.techcorp.events.MarketSlowdownEvent;
 import com.university.techcorp.events.ProductivityBoostEvent;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -34,14 +35,38 @@ public class GameController {
 
     @GetMapping("/game/start-projects")
     public Map<String, Object> startProjects() {
-        engine.startAllPlannedProjects();
-        return buildResponse("All planned projects have been started.");
+        try {
+            engine.startAllPlannedProjects();
+            return buildResponse("All possible projects have been started.");
+        } catch (IllegalArgumentException exception) {
+            return buildResponse("Action failed: " + exception.getMessage());
+        }
+    }
+
+    @GetMapping("/game/start-project/{projectIndex}")
+    public Map<String, Object> startProject(@PathVariable int projectIndex) {
+        try {
+            engine.startProjectByIndex(projectIndex);
+            return buildResponse("Selected project has been started.");
+        } catch (IllegalArgumentException exception) {
+            return buildResponse("Action failed: " + exception.getMessage());
+        }
     }
 
     @GetMapping("/game/assign-employees")
     public Map<String, Object> assignEmployees() {
         engine.assignAllEmployeesToFirstProject();
         return buildResponse("All employees assigned to the first project.");
+    }
+
+    @GetMapping("/game/assign-employees/{projectIndex}")
+    public Map<String, Object> assignEmployeesToProject(@PathVariable int projectIndex) {
+        try {
+            engine.assignAllEmployeesToProjectByIndex(projectIndex);
+            return buildResponse("All employees assigned to selected project.");
+        } catch (IllegalArgumentException exception) {
+            return buildResponse("Action failed: " + exception.getMessage());
+        }
     }
 
     @GetMapping("/game/work")
@@ -77,7 +102,7 @@ public class GameController {
     private void resetEngine() {
         Company company = createCompany();
 
-        this.engine = new GameEngine(company, 12);
+        this.engine = new GameEngine(company, 12, 100000);
 
         this.engine.addEvent(new MarketSlowdownEvent());
         this.engine.addEvent(new ProductivityBoostEvent());
@@ -85,19 +110,21 @@ public class GameController {
     }
 
     private Company createCompany() {
-        Company company = new Company("TechCorp", 50000);
+        Company company = new Company("TechCorp", 120000);
 
-        company.hire(new Developer("Anna", 8, 7000));
-        company.hire(new Tester("Piotr", 6, 6000));
-        company.hire(new Manager("Ewa", 7, 9000));
+        company.hire(new Developer("Anna", 8, 5000));
+        company.hire(new Tester("Peter", 6, 4000));
+        company.hire(new Manager("Evelyn", 7, 6000));
 
-        Project mobileApp = new Project("Mobile App", 60, 25000, true);
-        Project website = new Project("Website", 35, 12000, false);
-        Project securityAudit = new Project("Security Audit", 45, 18000, false);
+        Project mobileApp = new Project("Mobile App", 110, 35000, 5000, true);
+        Project website = new Project("Website", 70, 22000, 3000, false);
+        Project securityAudit = new Project("Security Audit", 90, 30000, 4000, false);
+        Project cloudMigration = new Project("Cloud Migration", 130, 45000, 7000, true);
 
         company.addProject(mobileApp);
         company.addProject(website);
         company.addProject(securityAudit);
+        company.addProject(cloudMigration);
 
         return company;
     }
@@ -106,8 +133,11 @@ public class GameController {
         Map<String, Object> response = new LinkedHashMap<>();
 
         response.put("message", message);
+        response.put("eventMessage", engine.getLastEventMessage());
+        response.put("finalMessage", engine.getFinalMessage());
         response.put("turn", engine.getTurn());
         response.put("maxTurns", engine.getMaxTurns());
+        response.put("targetCompanyValue", engine.getTargetCompanyValue());
         response.put("result", engine.getResult().toString());
         response.put("company", buildCompanyData());
         response.put("employees", buildEmployeesData());
@@ -150,20 +180,25 @@ public class GameController {
     private List<Map<String, Object>> buildProjectsData() {
         List<Map<String, Object>> data = new ArrayList<>();
 
+        int index = 0;
+
         for (Project project : engine.getCompany().getProjects()) {
             Map<String, Object> projectData = new LinkedHashMap<>();
 
+            projectData.put("index", index);
             projectData.put("name", project.getName());
             projectData.put("status", project.getStatus().toString());
             projectData.put("progress", project.getProgress());
             projectData.put("requiredWork", project.getRequiredWork());
             projectData.put("progressPercentage", project.getProgressPercentage());
             projectData.put("reward", project.getReward());
+            projectData.put("startCost", project.getStartCost());
             projectData.put("strategic", project.isStrategic());
             projectData.put("teamSize", project.getTeam().size());
             projectData.put("paid", project.isPaid());
 
             data.add(projectData);
+            index++;
         }
 
         return data;

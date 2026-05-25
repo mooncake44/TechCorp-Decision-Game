@@ -43,17 +43,34 @@ public class Company {
         projects.add(project);
     }
 
-    public void workOnProjects() {
-        for (Project project : projects) {
-            project.workOneTurn();
+    public void startProject(Project project) {
+        if (project == null) {
+            throw new IllegalArgumentException("Project cannot be null.");
         }
+
+        if (project.getStatus() != ProjectStatus.PLANNED && project.getStatus() != ProjectStatus.ON_HOLD) {
+            return;
+        }
+
+        if (cash < project.getStartCost()) {
+            throw new IllegalArgumentException("Not enough cash to start project: " + project.getName());
+        }
+
+        cash -= project.getStartCost();
+        project.start();
     }
 
     public void startAllPlannedProjects() {
         for (Project project : projects) {
-            if (project.getStatus() == ProjectStatus.PLANNED) {
-                project.start();
+            if (project.getStatus() == ProjectStatus.PLANNED || project.getStatus() == ProjectStatus.ON_HOLD) {
+                startProject(project);
             }
+        }
+    }
+
+    public void workOnProjects() {
+        for (Project project : projects) {
+            project.workOneTurn();
         }
     }
 

@@ -9,12 +9,17 @@ public class Project {
     private int requiredWork;
     private int progress;
     private double reward;
+    private double startCost;
     private boolean strategic;
     private boolean paid;
     private ProjectStatus status;
     private List<Employee> team;
 
     public Project(String name, int requiredWork, double reward, boolean strategic) {
+        this(name, requiredWork, reward, 0, strategic);
+    }
+
+    public Project(String name, int requiredWork, double reward, double startCost, boolean strategic) {
         if (name == null || name.isBlank()) {
             throw new IllegalArgumentException("Project name cannot be blank.");
         }
@@ -27,9 +32,14 @@ public class Project {
             throw new IllegalArgumentException("Reward cannot be negative.");
         }
 
+        if (startCost < 0) {
+            throw new IllegalArgumentException("Start cost cannot be negative.");
+        }
+
         this.name = name;
         this.requiredWork = requiredWork;
         this.reward = reward;
+        this.startCost = startCost;
         this.strategic = strategic;
         this.progress = 0;
         this.paid = false;
@@ -120,6 +130,10 @@ public class Project {
         return reward;
     }
 
+    public double getStartCost() {
+        return startCost;
+    }
+
     public ProjectStatus getStatus() {
         return status;
     }
@@ -138,6 +152,7 @@ public class Project {
                 + " | status: " + status
                 + " | progress: " + progress + "/" + requiredWork
                 + " | reward: " + reward
+                + " | start cost: " + startCost
                 + " | strategic: " + strategic;
     }
 }
