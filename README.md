@@ -110,11 +110,11 @@ Each project has:
 
 Projects can have different statuses, such as:
 
-PLANNED,
+```PLANNED,
 IN_PROGRESS,
 ON_HOLD,
 FINISHED,
-CANCELLED
+CANCELLED```
 
 A project receives progress only when it is in progress and has employees assigned to it.
 
@@ -225,37 +225,37 @@ This separation keeps the code easier to understand, maintain, and extend.
 
 ### Health Check
 
-GET /health
+```GET /health```
 
 Returns a simple message confirming that the application is running.
 
 ### Game State
 
-GET /game/state
+```GET /game/state```
 
 Returns the current state of the game.
 
 ### Start Project
 
-GET /game/start-project/{projectIndex}
+```GET /game/start-project/{projectIndex}```
 
 Starts a selected project.
 
 ### Assign Employees
 
-GET /game/assign-employees/{projectIndex}
+```GET /game/assign-employees/{projectIndex}```
 
 Assigns employees to the selected project.
 
 ### Next Turn
 
-GET /game/next-turn
+```GET /game/next-turn```
 
 Processes the next full turn.
 
 ### Reset Game
 
-GET /game/reset
+```GET /game/reset```
 
 Restarts the game from the initial state.
 
