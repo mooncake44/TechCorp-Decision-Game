@@ -145,6 +145,7 @@ Events are implemented using the GameEvent interface.
 
 ## Project Structure
 
+```text
 src/main/java/com/university/techcorp
 │
 ├── api
@@ -171,12 +172,19 @@ src/main/java/com/university/techcorp
 │   └── ClientBonusEvent.java
 │
 └── Main.java
+```
 
 Static frontend files are located in:
+
+```text
 src/main/resources/static
+```
 
 The main web interface is:
+
+```text
 index.html
+```
 
 ---
 
