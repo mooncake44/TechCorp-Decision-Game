@@ -262,6 +262,34 @@ Restarts the game from the initial state.
 
 ---
 
+## How to Run the Project
+
+### 1. Clone the repository
+
+```git clone <repository-url>
+cd <repository-folder>
+```
+
+### 2. Run the application
+
+```mvn spring-boot:run```
+
+### 3. Open the application in the browser
+
+```http://localhost:8080```
+
+If the project is running in GitHub Codespaces, open the forwarded port 8080.
+
+---
+
+### Build the Project
+
+To build the project as a JAR file, run:
+
+```mvn clean package```
+
+The generated files will appear in the target folder.
+
 ## Educational Purpose
 
 This project demonstrates several important Java and software design concepts:
