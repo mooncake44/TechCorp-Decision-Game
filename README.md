@@ -114,7 +114,8 @@ Projects can have different statuses, such as:
 IN_PROGRESS,
 ON_HOLD,
 FINISHED,
-CANCELLED```
+CANCELLED
+```
 
 A project receives progress only when it is in progress and has employees assigned to it.
 
