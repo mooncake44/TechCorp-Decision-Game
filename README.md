@@ -33,6 +33,8 @@ The company value is calculated based on:
 ```text
 cash + reputation * 1000 + finishedProjects * 5000
 
+---
+
 ## Technologies Used
 
 * Java 17
@@ -41,6 +43,8 @@ cash + reputation * 1000 + finishedProjects * 5000
 * HTML
 * JavaScript
 * GitHub Codespaces
+
+---
 
 ## Features
 
